@@ -53,4 +53,13 @@ public class CalculatePointsTest {
         PointsCalculator pointsCalculator = new PointsCalculator(transactionsRecord);
         Assertions.assertThrows(RuntimeException.class, pointsCalculator::calculatePoints);
     }
+
+    @Test
+    public void shouldReturnZeroWhenListIsEmpty() {
+        List<BigDecimal> transactionsRecord = new ArrayList<>();
+
+        PointsCalculator pointsCalculator = new PointsCalculator(transactionsRecord);
+        assertEquals(0, pointsCalculator.getPointAmount().compareTo(new BigDecimal(0
+        )));
+    }
 }
