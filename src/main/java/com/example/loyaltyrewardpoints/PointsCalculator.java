@@ -1,6 +1,8 @@
 package com.example.loyaltyrewardpoints;
 
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,6 +10,7 @@ import java.util.List;
 
 public class PointsCalculator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PointsCalculator.class);
     public static final BigDecimal FIFTY_THRESHOLD = new BigDecimal(5000);
     public static final BigDecimal CENTS_TO_DOLLAR_CONVERTER = BigDecimal.valueOf(100);
     private final BigDecimal HUNDRED_THRESHOLD = new BigDecimal(10000);
@@ -29,14 +32,17 @@ public class PointsCalculator {
     }
 
     private BigDecimal calculateOneTransactionPointsAmount(final BigDecimal amount) throws RuntimeException {
+        LOGGER.info("Calculating points for amount: {}", amount);
         BigDecimal points = BigDecimal.ZERO;
         if (isLessThanZero(amount)) {
+            LOGGER.error("Amount spent must be greater than 0");
             throw new RuntimeException("Amount spent must be greater than 0");
         } else if (isGreaterThanSecondThreshold(amount)) {
             points = amount.subtract(HUNDRED_THRESHOLD).multiply(HUNDRED_THRESHOLD_MULTIPLIER).add(FIFTY_THRESHOLD);
         } else if (isGreaterThanFirstThreshold(amount)) {
             points = amount.subtract(FIFTY_THRESHOLD);
         }
+        LOGGER.info("Calculated points: {}", points);
         return points.divide(CENTS_TO_DOLLAR_CONVERTER, RoundingMode.DOWN);
     }
 
