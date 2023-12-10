@@ -1,6 +1,5 @@
-package com.example.loyaltyrewardpoints;
+package com.example.loyaltyrewardpoints.commons;
 
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,30 +7,21 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-public class PointsCalculator {
+public class RewardPointsCalculator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PointsCalculator.class);
     public static final BigDecimal FIFTY_THRESHOLD = new BigDecimal(5000);
     public static final BigDecimal CENTS_TO_DOLLAR_CONVERTER = BigDecimal.valueOf(100);
-    private final BigDecimal HUNDRED_THRESHOLD = new BigDecimal(10000);
-    private final BigDecimal HUNDRED_THRESHOLD_MULTIPLIER = new BigDecimal(2);
-    private final List<BigDecimal> transactionsRecord;
+    private static final Logger LOGGER = LoggerFactory.getLogger(RewardPointsCalculator.class);
+    private static final BigDecimal HUNDRED_THRESHOLD = new BigDecimal(10000);
+    private static final BigDecimal HUNDRED_THRESHOLD_MULTIPLIER = new BigDecimal(2);
 
-    @Getter
-    private BigDecimal pointAmount;
-
-    public PointsCalculator(final List<BigDecimal> transactionsRecord) {
-        this.transactionsRecord = transactionsRecord;
-        pointAmount = BigDecimal.ZERO;
-    }
-
-    public void calculatePoints() throws RuntimeException {
-        this.pointAmount = transactionsRecord.stream()
-                .map(this::calculateOneTransactionPointsAmount)
+    public static BigDecimal calculatePoints(final List<BigDecimal> transactionRecord) throws RuntimeException {
+        return transactionRecord.stream()
+                .map(RewardPointsCalculator::calculateOneTransactionPointsAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private BigDecimal calculateOneTransactionPointsAmount(final BigDecimal amount) throws RuntimeException {
+    private static BigDecimal calculateOneTransactionPointsAmount(final BigDecimal amount) throws RuntimeException {
         LOGGER.info("Calculating points for amount: {}", amount);
         BigDecimal points = BigDecimal.ZERO;
         if (isLessThanZero(amount)) {
@@ -46,15 +36,15 @@ public class PointsCalculator {
         return points.divide(CENTS_TO_DOLLAR_CONVERTER, RoundingMode.DOWN);
     }
 
-    private boolean isGreaterThanSecondThreshold(final BigDecimal amount) {
+    private static boolean isGreaterThanSecondThreshold(final BigDecimal amount) {
         return amount.compareTo(HUNDRED_THRESHOLD) > 0;
     }
 
-    private boolean isGreaterThanFirstThreshold(final BigDecimal amount) {
+    private static boolean isGreaterThanFirstThreshold(final BigDecimal amount) {
         return amount.compareTo(FIFTY_THRESHOLD) >= 0;
     }
 
-    private boolean isLessThanZero(final BigDecimal amount) {
+    private static boolean isLessThanZero(final BigDecimal amount) {
         return amount.compareTo(BigDecimal.ZERO) < 0;
     }
 

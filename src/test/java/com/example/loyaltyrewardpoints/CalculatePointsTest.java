@@ -1,6 +1,6 @@
 package com.example.loyaltyrewardpoints;
 
-import org.junit.jupiter.api.Assertions;
+import com.example.loyaltyrewardpoints.commons.RewardPointsCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculatePointsTest {
 
@@ -27,9 +27,7 @@ public class CalculatePointsTest {
         List<BigDecimal> transactionsRecord = new ArrayList<>();
         transactionsRecord.add(amount);
 
-        PointsCalculator pointsCalculator = new PointsCalculator(transactionsRecord);
-        pointsCalculator.calculatePoints();
-        assertEquals(0, pointsCalculator.getPointAmount().compareTo(expectedPoints));
+        assertEquals(0, RewardPointsCalculator.calculatePoints(transactionsRecord).compareTo(expectedPoints));
     }
 
     @Test
@@ -39,9 +37,7 @@ public class CalculatePointsTest {
         transactionsRecord.add(new BigDecimal(10000)); //50
         transactionsRecord.add(new BigDecimal(50000)); //850
 
-        PointsCalculator pointsCalculator = new PointsCalculator(transactionsRecord);
-        pointsCalculator.calculatePoints();
-        assertEquals(0, pointsCalculator.getPointAmount().compareTo(new BigDecimal(1010
+        assertEquals(0, RewardPointsCalculator.calculatePoints(transactionsRecord).compareTo(new BigDecimal(1010
         )));
     }
 
@@ -50,16 +46,16 @@ public class CalculatePointsTest {
         List<BigDecimal> transactionsRecord = new ArrayList<>();
         transactionsRecord.add(new BigDecimal(-1));
 
-        PointsCalculator pointsCalculator = new PointsCalculator(transactionsRecord);
-        Assertions.assertThrows(RuntimeException.class, pointsCalculator::calculatePoints);
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> RewardPointsCalculator.calculatePoints(transactionsRecord));
+        assertEquals("Amount spent must be greater than 0", exception.getMessage());
     }
 
     @Test
     public void shouldReturnZeroWhenListIsEmpty() {
         List<BigDecimal> transactionsRecord = new ArrayList<>();
 
-        PointsCalculator pointsCalculator = new PointsCalculator(transactionsRecord);
-        assertEquals(0, pointsCalculator.getPointAmount().compareTo(new BigDecimal(0
+        assertEquals(0, RewardPointsCalculator.calculatePoints(transactionsRecord).compareTo(new BigDecimal(0
         )));
     }
 }

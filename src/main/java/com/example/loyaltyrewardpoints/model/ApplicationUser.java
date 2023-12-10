@@ -1,4 +1,4 @@
-package com.example.loyaltyrewardpoints.repository;
+package com.example.loyaltyrewardpoints.model;
 
 import jakarta.persistence.Id;
 import lombok.Data;
@@ -9,15 +9,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @Getter
 @Setter
-public class User {
+public class ApplicationUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private BigDecimal rewardPointsForLastThreeMonths;
+
+    private String email;
 }

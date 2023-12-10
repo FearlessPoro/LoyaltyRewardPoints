@@ -1,4 +1,4 @@
-package com.example.loyaltyrewardpoints.repository;
+package com.example.loyaltyrewardpoints.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,8 +20,8 @@ public class Transaction {
 
     private LocalDateTime timestamp;
     private BigDecimal amount;
+    private BigDecimal rewardPoints;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private ApplicationUser user;
 }
