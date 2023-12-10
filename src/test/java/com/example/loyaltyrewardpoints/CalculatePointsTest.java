@@ -16,11 +16,11 @@ public class CalculatePointsTest {
     @ParameterizedTest
     @CsvSource({
             "12000, 90",
-            "6000, 10",
+            "6075, 10",
             "3000, 0",
-            "15000, 150",
-            "10000, 50",
-            "1000000, 19850",
+            "15050, 151",
+            "10025, 50",
+            "1000010, 19850",
             "0, 0"
     })
     public void shouldCalculateMultipleTransactionsValue(BigDecimal amount, BigDecimal expectedPoints) {
