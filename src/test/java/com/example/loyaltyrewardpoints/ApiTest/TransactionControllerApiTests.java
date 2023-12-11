@@ -4,8 +4,7 @@ import com.example.loyaltyrewardpoints.dto.ApplicationUserDto;
 import com.example.loyaltyrewardpoints.dto.TransactionDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 
@@ -13,6 +12,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TransactionControllerApiTests {
 
     @BeforeAll
@@ -22,6 +22,7 @@ public class TransactionControllerApiTests {
     }
 
     @Test
+    @Order(1)
     public void testAddTransaction() {
         ApplicationUserDto userDto = new ApplicationUserDto();
         userDto.setEmail("test@example.com");
@@ -48,6 +49,7 @@ public class TransactionControllerApiTests {
     }
 
     @Test
+    @Order(2)
     public void testAddTransactionWithInvalidUserId() {
         given()
                 .pathParam("userId", 999)
@@ -62,6 +64,7 @@ public class TransactionControllerApiTests {
     }
 
     @Test
+    @Order(3)
     public void testUpdateTransaction() {
         given()
                 .pathParam("transactionId", 1)
@@ -75,6 +78,7 @@ public class TransactionControllerApiTests {
     }
 
     @Test
+    @Order(4)
     public void testUpdateTransactionWithInvalidId() {
         given()
                 .pathParam("transactionId", 999)
