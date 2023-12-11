@@ -1,4 +1,16 @@
-# Running a Loyalty Reward Points app 
+# Loyalty Reward Points
+
+This is a simple Spring Boot application that allows calculation of loyalty reward points for a customer based on amount
+spent. The application uses an in-memory H2 database to store customer and transaction data. The application is 
+making a few assumptions:
+- The transaction amounts are stored in cents.
+- There is a batch job that runs every 24 hours to remove points earned on the day 3 months+1 day from today.
+It is assumed that the batch job will run at 12:00 AM every day.
+- If the reward points need to be calculated for existing clients and transactions, the batch job will need to be run. 
+There is an endpoint that performs this functionality in TransactionController.
+- The endpoints are for internal use only and there is no authentication or authorization implemented.
+
+# Running a Loyalty Reward Points app
 
 ## Prerequisites
 
