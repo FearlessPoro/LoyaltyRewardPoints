@@ -65,7 +65,7 @@ public class TransactionService {
                 transaction.getUser().getId());
         final List<BigDecimal> amounts = new ArrayList<>();
         amounts.add(transactionDto.getAmount());
-        transaction.setAmount(RewardPointsCalculator.calculatePoints(amounts));
+        transaction.setRewardPoints(RewardPointsCalculator.calculatePoints(amounts));
         userService.addUserRewardPoints(transaction.getUser().getId(), transaction.getRewardPoints());
         LOGGER.info("Adding {} reward points to user with id: {}", transaction.getRewardPoints(),
                 transaction.getUser().getId());
