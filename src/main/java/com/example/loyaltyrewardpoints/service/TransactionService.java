@@ -24,35 +24,35 @@ public class TransactionService {
     private final ApplicationUserService userService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, ApplicationUserRepository userRepository, ApplicationUserService userService) {
+    public TransactionService(final TransactionRepository transactionRepository, final ApplicationUserRepository userRepository, ApplicationUserService userService) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.userService = userService;
     }
 
-    public TransactionDto addTransaction(Long userId, TransactionDto transactionDto) throws ChangeSetPersister.NotFoundException {
-        ApplicationUser user = userRepository.getReferenceById(userId);
+    public TransactionDto addTransaction(final Long userId, final TransactionDto transactionDto) throws ChangeSetPersister.NotFoundException {
+        final ApplicationUser user = userRepository.getReferenceById(userId);
 
         Transaction transaction = new Transaction();
         transaction.setAmount(transactionDto.getAmount());
         transaction.setTimestamp(LocalDateTime.now());
-        List<BigDecimal> amountList = new ArrayList<>();
+        final List<BigDecimal> amountList = new ArrayList<>();
         amountList.add(transactionDto.getAmount());
         transaction.setRewardPoints(RewardPointsCalculator.calculatePoints(amountList));
         transaction.setUser(user);
         userService.addUserRewardPoints(userId, transaction.getRewardPoints());
 
-        Transaction savedTransaction = transactionRepository.save(transaction);
+        final Transaction savedTransaction = transactionRepository.save(transaction);
 
         return TransactionMapper.mapToDto(savedTransaction);
     }
 
-    public Transaction updateTransaction(Long transactionId, TransactionDto transactionDto) throws ChangeSetPersister.NotFoundException {
-        Transaction transaction = transactionRepository.getTransactionById(transactionId)
+    public Transaction updateTransaction(final Long transactionId, final TransactionDto transactionDto) throws ChangeSetPersister.NotFoundException {
+        final Transaction transaction = transactionRepository.getTransactionById(transactionId)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         transaction.setAmount(transactionDto.getAmount());
         userService.removeUserRewardPoints(transaction.getUser().getId(), transaction.getRewardPoints());
-        List<BigDecimal> amounts = new ArrayList<>();
+        final List<BigDecimal> amounts = new ArrayList<>();
         amounts.add(transactionDto.getAmount());
         transaction.setAmount(RewardPointsCalculator.calculatePoints(amounts));
         userService.addUserRewardPoints(transaction.getUser().getId(), transaction.getRewardPoints());

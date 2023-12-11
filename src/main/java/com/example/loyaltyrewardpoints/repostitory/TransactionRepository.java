@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    Optional<Transaction> getTransactionById(Long id);
+    Optional<Transaction> getTransactionById(final Long id);
 
-    List<Transaction> findByUserIdAndTimestampBetween(Long userId, LocalDateTime startTime, LocalDateTime endTime);
+    List<Transaction> findByUserIdAndTimestampBetween(final Long userId, final LocalDateTime startTime, LocalDateTime endTime);
 }

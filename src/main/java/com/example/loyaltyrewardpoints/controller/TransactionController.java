@@ -25,8 +25,8 @@ public class TransactionController {
 
     @PostMapping("/{userId}")
     public ResponseEntity<?> addTransaction(
-            @PathVariable Long userId,
-            @RequestBody TransactionDto transactionDto) {
+            @PathVariable final Long userId,
+            @RequestBody final TransactionDto transactionDto) {
         try {
             return ResponseEntity.ok(transactionService.addTransaction(userId, transactionDto));
         } catch (ChangeSetPersister.NotFoundException e) {
@@ -38,8 +38,8 @@ public class TransactionController {
 
     @PutMapping("/{transactionId}")
     public ResponseEntity<?> updateTransaction(
-            @PathVariable Long transactionId,
-            @RequestBody TransactionDto updatedTransactionDto) {
+            @PathVariable final Long transactionId,
+            @RequestBody final TransactionDto updatedTransactionDto) {
         try {
             return ResponseEntity.ok(transactionService.updateTransaction(transactionId, updatedTransactionDto));
         } catch (ChangeSetPersister.NotFoundException e) {
@@ -51,9 +51,9 @@ public class TransactionController {
 
     @GetMapping("/user/{applicationUserId}/time-period")
     public ResponseEntity<List<Transaction>> getAllUserTransactionsFromTimePeriod(
-            @PathVariable Long applicationUserId,
-            @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
-            @RequestParam("endTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
+            @PathVariable final Long applicationUserId,
+            @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime startTime,
+            @RequestParam("endTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime endTime) {
         List<Transaction> userTransactions = transactionService.getAllUserTransactionsFromTimePeriod(applicationUserId, startTime, endTime);
         return ResponseEntity.ok(userTransactions);
     }

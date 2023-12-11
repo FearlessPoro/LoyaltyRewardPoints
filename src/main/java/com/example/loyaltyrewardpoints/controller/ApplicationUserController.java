@@ -19,7 +19,7 @@ public class ApplicationUserController {
     }
 
     @GetMapping("/{applicationUserId}")
-    public ResponseEntity<ApplicationUserDto> getApplicationUserById(@PathVariable Long applicationUserId) {
+    public ResponseEntity<ApplicationUserDto> getApplicationUserById(@PathVariable final Long applicationUserId) {
         try {
             return ResponseEntity.ok(userService.getUserById(applicationUserId));
         } catch (ChangeSetPersister.NotFoundException e) {
@@ -28,7 +28,7 @@ public class ApplicationUserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApplicationUserDto> createApplicationUser(@RequestBody ApplicationUserDto applicationUserDto) {
+    public ResponseEntity<ApplicationUserDto> createApplicationUser(@RequestBody final ApplicationUserDto applicationUserDto) {
         return ResponseEntity.ok(userService.createUser(applicationUserDto));
     }
 }
