@@ -9,9 +9,10 @@ import java.util.List;
 
 public class RewardPointsCalculator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RewardPointsCalculator.class);
+
     public static final BigDecimal FIFTY_THRESHOLD = new BigDecimal(5000);
     public static final BigDecimal CENTS_TO_DOLLAR_CONVERTER = BigDecimal.valueOf(100);
-    private static final Logger LOGGER = LoggerFactory.getLogger(RewardPointsCalculator.class);
     private static final BigDecimal HUNDRED_THRESHOLD = new BigDecimal(10000);
     private static final BigDecimal HUNDRED_THRESHOLD_MULTIPLIER = new BigDecimal(2);
 
