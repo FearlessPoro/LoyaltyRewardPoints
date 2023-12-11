@@ -25,7 +25,7 @@ public class ApplicationUserService {
         this.userRepository = userRepository;
     }
 
-    public ApplicationUserDto createUser(final ApplicationUserDto userDto) {
+    public ApplicationUserDto createUser(final ApplicationUserDto userDto) throws RuntimeException {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             LOGGER.error("User with that email {} already exists", userDto.getEmail());
             throw new RuntimeException("User with that email " + userDto.getEmail() + " already exists");
@@ -33,7 +33,7 @@ public class ApplicationUserService {
         final ApplicationUser user = UserMapper.mapToEntity(userDto);
         user.setEmail(userDto.getEmail());
         user.setRewardPointsForLastThreeMonths(BigDecimal.ZERO);
-        LOGGER.info("Saving user with email: {}, with id: {}", user.getEmail(), user.getId());
+        LOGGER.info("Saving user with email: {}", user.getEmail());
         return UserMapper.mapToDto(userRepository.save(user));
     }
 

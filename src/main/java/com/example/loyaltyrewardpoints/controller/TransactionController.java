@@ -11,12 +11,16 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/transaction")
+@RequestMapping("/api/transaction")
 public class TransactionController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RewardPointsCalculator.class);
@@ -34,12 +38,21 @@ public class TransactionController {
             @RequestBody final TransactionDto transactionDto) {
         LOGGER.info("Saving transaction with amount: {} for user with id: {}", transactionDto.getAmount(), userId);
         try {
-            return ResponseEntity.ok(transactionService.addTransaction(userId, transactionDto));
+            TransactionDto createdTransaction = transactionService.addTransaction(userId, transactionDto);
+            final String uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/api/transaction/{id}")
+                    .buildAndExpand(createdTransaction.getId())
+                    .toUriString();
+
+            return ResponseEntity.created(URI.create(uri)).body(createdTransaction);
         } catch (ChangeSetPersister.NotFoundException e) {
             String errorMessage = "{\"error\": \"Bad Request\", \"message\":" +
                     " \"User with that ID does not exist. Please provide a valid userID.\"}";
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", errorMessage);
             LOGGER.error("User with id: {} not found", userId);
-            return ResponseEntity.badRequest().body(errorMessage);
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 
@@ -54,8 +67,11 @@ public class TransactionController {
         } catch (ChangeSetPersister.NotFoundException e) {
             String errorMessage = "{\"error\": \"Bad Request\", \"message\":" +
                     " \"Transaction with that ID does not exist. Please provide a valid transactionID.\"}";
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", errorMessage);
             LOGGER.error("Transaction with id: {} not found", transactionId);
-            return ResponseEntity.badRequest().body(errorMessage);
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 

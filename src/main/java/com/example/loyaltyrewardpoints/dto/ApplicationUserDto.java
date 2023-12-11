@@ -10,6 +10,4 @@ import java.math.BigDecimal;
 public class ApplicationUserDto {
 
     private String email;
-
-    private BigDecimal rewardPointsForLastThreeMonths;
 }

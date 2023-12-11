@@ -27,6 +27,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.rest-assured:json-path'
+    testImplementation 'io.rest-assured:xml-path'
+    testImplementation 'io.rest-assured:json-schema-validator'
 
     compileOnly 'org.projectlombok:lombok'
 

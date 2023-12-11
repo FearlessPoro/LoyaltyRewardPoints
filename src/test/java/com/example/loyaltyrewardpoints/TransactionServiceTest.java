@@ -105,16 +105,16 @@ class TransactionServiceTest {
     @Test
     void testGetAllUserTransactionsFromTimePeriod() {
         Long userId = 1L;
-        LocalDateTime startTime = LocalDateTime.now().minusDays(1);
+        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
         LocalDateTime endTime = LocalDateTime.now();
         List<Transaction> transactions = new ArrayList<>();
 
-        when(transactionRepository.findByUserIdAndTimestampBetween(userId, startTime, endTime)).thenReturn(transactions);
+        when(transactionRepository.findByUserIdAndTimestampBetween(userId, oneDayAgo, endTime)).thenReturn(transactions);
 
-        List<Transaction> result = transactionService.getAllUserTransactionsFromTimePeriod(userId, startTime, endTime);
+        List<Transaction> result = transactionService.getAllUserTransactionsFromTimePeriod(userId, oneDayAgo, endTime);
 
         assertNotNull(result);
         assertEquals(transactions, result);
-        verify(transactionRepository, times(1)).findByUserIdAndTimestampBetween(userId, startTime, endTime);
+        verify(transactionRepository, times(1)).findByUserIdAndTimestampBetween(userId, oneDayAgo, endTime);
     }
 }
