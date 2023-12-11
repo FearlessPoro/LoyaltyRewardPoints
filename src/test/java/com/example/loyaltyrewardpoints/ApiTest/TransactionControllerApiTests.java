@@ -106,10 +106,9 @@ public class TransactionControllerApiTests {
         final Long applicationUserId = 1L;
         final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
-        final LocalDateTime startTime = LocalDateTime.now().minusDays(1);
+        final LocalDateTime startTime = LocalDateTime.now().minusMonths(3);
         final LocalDateTime endTime = LocalDateTime.now();
 
-        // Format the date using the specified pattern
         final String formattedStartTime = startTime.format(formatter);
         final String formattedEndTime = endTime.format(formatter);
 
