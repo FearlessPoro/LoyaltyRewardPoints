@@ -59,7 +59,7 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/user/{applicationUserId}/time-period")
+    @GetMapping("/{applicationUserId}/time-period")
     public ResponseEntity<List<Transaction>> getAllUserTransactionsFromTimePeriod(
             @PathVariable final Long applicationUserId,
             @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime startTime,
