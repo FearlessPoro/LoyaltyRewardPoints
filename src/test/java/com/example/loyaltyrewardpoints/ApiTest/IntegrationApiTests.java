@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TransactionControllerApiTests {
+public class IntegrationApiTests {
 
     @BeforeAll
     public static void setup() {
