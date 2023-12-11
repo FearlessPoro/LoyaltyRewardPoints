@@ -7,6 +7,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
@@ -21,17 +22,18 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@SpringBootTest(properties = {"spring.profiles.active=test"},
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class IntegrationApiTests {
 
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = "http://localhost:8080/api";
-
     }
 
     @Test
-    @Order(1)
-    public void testAddTransaction() {
+    @Order(0)
+    public void testCreatingUser() {
         ApplicationUserDto userDto = new ApplicationUserDto();
         userDto.setEmail("test@example.com");
 
@@ -41,7 +43,11 @@ public class IntegrationApiTests {
                 .post("/user")
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
 
+    @Test
+    @Order(1)
+    public void testAddTransaction() {
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setAmount(BigDecimal.valueOf(10000.0));
 
@@ -140,6 +146,35 @@ public class IntegrationApiTests {
         assertEquals(2, userTransactions.size());
         assertEquals(BigDecimal.valueOf(20000.00).setScale(2), userTransactions.get(0).getAmount());
         assertEquals(secondTransactionValue.setScale(2), userTransactions.get(1).getAmount());
+    }
+
+    @Test
+    @Order(6)
+    public void shouldFetchNoTransactions() {
+        final long applicationUserId = 1L;
+
+        final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
+        final LocalDateTime startTime = LocalDateTime.now().minusMonths(3);
+        final LocalDateTime endTime = LocalDateTime.now().minusMonths(2);
+
+        final String formattedStartTime = startTime.format(formatter);
+        final String formattedEndTime = endTime.format(formatter);
+
+        final Response response = given()
+                .param("startTime", formattedStartTime)
+                .param("endTime", formattedEndTime)
+                .when()
+                .get("/transaction/" + applicationUserId + "/time-period")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .extract()
+                .response();
+
+        List<Transaction> userTransactions = Arrays.asList(response.getBody().as(Transaction[].class));
+
+        assertEquals(0, userTransactions.size());
     }
 
 }
