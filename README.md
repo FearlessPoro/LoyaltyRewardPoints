@@ -51,3 +51,5 @@ Execute tests using the following Gradle command:
 ```bash
 ./gradlew test
 ```
+
+Please note that in order to run the API tests, the application needs to be running.
