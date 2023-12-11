@@ -104,6 +104,18 @@ public class IntegrationApiTests {
     @Order(5)
     public void testGetAllUserTransactionsFromTimePeriod_Success() {
         final Long applicationUserId = 1L;
+        final TransactionDto transactionDto = new TransactionDto();
+        final BigDecimal secondTransactionValue = BigDecimal.valueOf(100000.0);
+        transactionDto.setAmount(secondTransactionValue);
+        given()
+                .pathParam("applicationUserId", applicationUserId)
+                .contentType(ContentType.JSON)
+                .body(transactionDto)
+                .when()
+                .post("/transaction/{applicationUserId}")
+                .then()
+                .statusCode(HttpStatus.CREATED.value());
+
         final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
         final LocalDateTime startTime = LocalDateTime.now().minusMonths(3);
@@ -125,8 +137,9 @@ public class IntegrationApiTests {
 
         List<Transaction> userTransactions = Arrays.asList(response.getBody().as(Transaction[].class));
 
-        assertEquals(1, userTransactions.size());
+        assertEquals(2, userTransactions.size());
         assertEquals(BigDecimal.valueOf(20000.00).setScale(2), userTransactions.get(0).getAmount());
+        assertEquals(secondTransactionValue.setScale(2), userTransactions.get(1).getAmount());
     }
 
 }
