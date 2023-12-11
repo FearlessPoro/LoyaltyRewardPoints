@@ -4,16 +4,14 @@ import com.example.loyaltyrewardpoints.dto.ApplicationUserDto;
 import com.example.loyaltyrewardpoints.dto.TransactionDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 public class TransactionControllerApiTests {
 
@@ -89,7 +87,6 @@ public class TransactionControllerApiTests {
                 .body("error", equalTo("Bad Request"))
                 .body("message", containsString("Transaction with that ID does not exist"));
     }
-
 
 
 }
